@@ -114,8 +114,26 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
 
 .level-grid{
   width:min(100%, 1180px);
+  display:flex; flex-direction:column; gap:clamp(10px,1.6vmin,20px);
+}
+
+.shelf-row{
   display:grid; gap:clamp(12px,1.8vw,22px);
   grid-template-columns:repeat(auto-fill, minmax(clamp(150px,17vw,215px), 1fr));
+}
+
+/* the divider between the little levels and the big-kid ones */
+.shelf-head{
+  display:flex; align-items:baseline; flex-wrap:wrap; gap:.1em .8em;
+  padding:clamp(10px,1.8vmin,22px) 4px 0;
+  animation:rise .5s var(--ease-soft) backwards;
+}
+.shelf-head h2{
+  font-family:"Baloo 2",sans-serif; font-weight:800; color:var(--ink);
+  font-size:clamp(1.1rem,2.4vmin,1.55rem); line-height:1.1;
+}
+.shelf-head p{
+  font-weight:700; color:var(--ink-soft); font-size:clamp(.75rem,1.5vmin,.92rem);
 }
 
 .level-card{
@@ -232,7 +250,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
 
 .hud{ display:flex; align-items:center; gap:clamp(8px,1vw,14px); }
 
-.pips{ display:flex; gap:6px; }
+/* up to ten pips on the big-kid levels, so they wrap to a second row
+   rather than pushing the sound and restart buttons off the bar */
+.pips{ display:flex; flex-wrap:wrap; justify-content:flex-end; gap:5px 6px; max-width:clamp(120px,22vw,260px); }
 .pip{
   width:clamp(12px,1.7vmin,18px); aspect-ratio:1; border-radius:50%;
   background:#fff; box-shadow:inset 0 0 0 3px rgba(108,99,146,.22);
@@ -340,6 +360,26 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   text-align:center; color:#fff; line-height:1.15;
   background:linear-gradient(120deg, var(--theme-a) 0%, var(--theme-b) 100%);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* --- card front: flags (kind 'flag') ---
+   Flags come in many shapes — Nepal is a double pennant, Switzerland is
+   square, Ohio is a swallowtail. Each one is shown whole and centred on
+   a soft mat rather than cropped to fill the card, because the cropped
+   corner is often the only thing telling two flags apart. */
+.flag-face{
+  flex:1 1 auto; min-height:0; display:grid; place-items:center;
+  padding:clamp(5px,1.1vmin,12px);
+  border-radius:calc(var(--card-r) - 6px) calc(var(--card-r) - 6px) 0 0;
+  background:
+    radial-gradient(circle at 30% 20%, #fff 0%, transparent 60%),
+    linear-gradient(160deg, #F4F1FB 0%, #E4DEF5 100%);
+}
+.flag-face img{
+  max-width:100%; max-height:100%; width:auto; height:auto;
+  object-fit:contain; display:block;
+  border-radius:3px;
+  box-shadow:0 2px 7px rgba(43,35,80,.3);
 }
 
 /* --- card front: numbers & letters (kind 'glyph') --- */
@@ -470,6 +510,24 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   animation:swell .6s var(--ease-pop);
 }
 @keyframes swell{ from{ transform:scale(.5) rotate(-12deg); } }
+
+/* flags keep their own proportions, so they get a rounded rectangle
+   instead of the round portrait frame — a circle would crop them */
+.fact-photo.is-flag{
+  width:clamp(130px,22vmin,215px);
+  aspect-ratio:auto; display:grid; place-items:center;
+  padding:clamp(8px,1.4vmin,14px);
+  border-radius:clamp(14px,2vmin,22px);
+  background:linear-gradient(160deg, #F6F3FC 0%, #E6E0F6 100%);
+  border:clamp(4px,.7vmin,7px) solid #fff;
+  box-shadow:0 0 0 clamp(3px,.5vmin,5px) var(--sun), 0 18px 34px -12px rgba(43,35,80,.55);
+  animation:swell .6s var(--ease-pop);
+}
+.fact-photo.is-flag img{
+  width:100%; height:auto; aspect-ratio:auto; object-fit:contain;
+  border-radius:5px; border:0; box-shadow:0 3px 10px rgba(43,35,80,.32);
+  animation:none;
+}
 
 /* the glyph / swatch levels get the same round portrait, drawn instead of photographed */
 .fact-photo.is-glyph,

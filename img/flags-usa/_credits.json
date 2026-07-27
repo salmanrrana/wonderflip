@@ -1,0 +1,114 @@
+[
+  {
+    "id": "alaska",
+    "file": "Flag of Alaska.svg",
+    "licence": "Public domain",
+    "author": "Benny Benson",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Alaska.svg"
+  },
+  {
+    "id": "arizona",
+    "file": "Flag of Arizona.svg",
+    "licence": "Public domain",
+    "author": "<div style=\"display:inline-block;padding:0 3px;background-color:#CCF\">Original:</div> <div style=\"display:inline-block;padding:3px 0;\">Unknown author</div> <div style=\"display:inline-block;padding:0 3px;background-color:#CCF\">Vector: </div> <div style=\"display:inline-block;\"><a href=\"//commons.wikimedia.org/wiki/User:Madden\" title=\"User:Madden\">Madden</a></div>",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Arizona.svg"
+  },
+  {
+    "id": "arkansas",
+    "file": "Flag of Arkansas.svg",
+    "licence": "Public domain",
+    "author": "?",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Arkansas.svg"
+  },
+  {
+    "id": "california",
+    "file": "Flag of California.svg",
+    "licence": "Public domain",
+    "author": "<ul><li><b>Original: </b> <a href=\"https://en.wikipedia.org/wiki/Donald_Graeme_Kelley\" class=\"extiw\" title=\"w:Donald Graeme Kelley\">Donald Graeme Kelley</a></li>\n<li><b>Vectorization: </b> <a href=\"https://en.wikipedia.org/wiki/User:DevinCook\" class=\"extiw\" title=\"en:User:DevinCook\">Devin Cook</a></li></ul>",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_California.svg"
+  },
+  {
+    "id": "colorado",
+    "file": "Flag of Colorado.svg",
+    "licence": "Public domain",
+    "author": "<div style=\"display:inline-block;padding:0 3px;background-color:#CCF\">Original:</div> <div style=\"display:inline-block;padding:3px 0;\"><a href=\"https://www.wikidata.org/wiki/Q133868517\" class=\"extiw\" title=\"d:Q133868517\"><span title=\"American historian, designer of the Colorado state flag\">Andrew Carlyle Carson</span></a></div> <div style=\"display:inline-block;padding:0 3px;background-color:#CCF\">Vector: </div> <div style=\"display:inline-block;\"><a href=\"//commons.wikimedia.org/wiki/User:Fleminra\" title=\"User:Fleminra\">Fleminra</a></div>",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Colorado.svg"
+  },
+  {
+    "id": "hawaii",
+    "file": "Flag of Hawaii.svg",
+    "licence": "Public domain",
+    "author": "Dbenbenn",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Hawaii.svg"
+  },
+  {
+    "id": "indiana",
+    "file": "Flag of Indiana.svg",
+    "licence": "Public domain",
+    "author": "The Indiana state flag was designed by Paul Hadley in 1917. This SVG file was made by <a href=\"//commons.wikimedia.org/wiki/User:Zscout370\" title=\"User:Zscout370\">Zscout370</a> with some modifications by <a href=\"//commons.wikimedia.org/wiki/User:HoosierMan1816\" title=\"User:HoosierMan1816\">HoosierMan1816</a>.",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Indiana.svg"
+  },
+  {
+    "id": "maryland",
+    "file": "Flag of Maryland.svg",
+    "licence": "Public domain",
+    "author": "Michael Wheeler",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Maryland.svg"
+  },
+  {
+    "id": "new-mexico",
+    "file": "Flag of New Mexico.svg",
+    "licence": "Public domain",
+    "author": "?",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_New_Mexico.svg"
+  },
+  {
+    "id": "ohio",
+    "file": "Flag of Ohio.svg",
+    "licence": "Public domain",
+    "author": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:John_Eisenmann\" class=\"extiw\" title=\"w:en:John Eisenmann\"><span title=\"American architect\">John Eisenmann</span></a></bdi>",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Ohio.svg"
+  },
+  {
+    "id": "oklahoma",
+    "file": "Flag of Oklahoma.svg",
+    "licence": "Public domain",
+    "author": "xrmap",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Oklahoma.svg"
+  },
+  {
+    "id": "rhode-island",
+    "file": "Flag of Rhode Island.svg",
+    "licence": "Public domain",
+    "author": "Xrmap flag collection 2.7",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Rhode_Island.svg"
+  },
+  {
+    "id": "south-carolina",
+    "file": "Flag of South Carolina.svg",
+    "licence": "Public domain",
+    "author": "Design by <a href=\"https://en.wikipedia.org/wiki/South_Carolina_General_Assembly\" class=\"extiw\" title=\"en:South Carolina General Assembly\">South Carolina General Assembly</a>, SVG by Steve Hall",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_South_Carolina.svg"
+  },
+  {
+    "id": "tennessee",
+    "file": "Flag of Tennessee.svg",
+    "licence": "Public domain",
+    "author": "<a href=\"https://cs.wikipedia.org/wiki/User:-xfi-\" class=\"extiw\" title=\"cs:User:-xfi-\">-xfi-</a>",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Tennessee.svg"
+  },
+  {
+    "id": "texas",
+    "file": "Flag of Texas.svg",
+    "licence": "Public domain",
+    "author": "Paul B. Joiner",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Texas.svg"
+  },
+  {
+    "id": "wyoming",
+    "file": "Flag of Wyoming.svg",
+    "licence": "Public domain",
+    "author": "<a href=\"//commons.wikimedia.org/wiki/User:Dbenbenn\" title=\"User:Dbenbenn\">User:Dbenbenn</a>",
+    "page": "https://commons.wikimedia.org/wiki/File:Flag_of_Wyoming.svg"
+  }
+]

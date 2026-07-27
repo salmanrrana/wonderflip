@@ -4,12 +4,9 @@
    Levels come from js/levels.js; cards from data/*.js.
    ============================================================= */
 
-/* ---- rounds: gentle ramp for little hands ---- */
-const ROUNDS = [
-  { pairs: 3, cols: 3, rows: 2 },
-  { pairs: 4, cols: 4, rows: 2 },
-  { pairs: 6, cols: 4, rows: 3 }
-];
+/* Each level brings its own three-round ladder (see js/levels.js): the
+   little levels ramp 3 → 4 → 6 pairs, the big-kid ones 6 → 8 → 10. */
+const rounds = () => level.rounds;
 
 const CHEERS = ['Yay!', 'Nice one!', 'You found it!', 'Wonderful!', 'Great looking!', 'Super!', 'Hooray!'];
 
@@ -105,6 +102,16 @@ function faceFront(item) {
             <span class="tag">${esc(item.name)}</span>`;
   }
 
+  // flags are vector art and every one has its own proportions, so they
+  // sit inside the card whole — cropping one to a square would lop the
+  // canton off half of them and make two flags look alike.
+  if (level.kind === 'flag') {
+    return `<span class="flag-face">
+              <img src="img/${level.id}/${item.id}.svg" alt="${esc(item.name)}" loading="eager" decoding="async">
+            </span>
+            <span class="tag">${esc(item.name)}</span>`;
+  }
+
   // glyph and swatch faces already carry their own label, so they get
   // no name tag underneath — it would just say the same thing twice.
   if (level.kind === 'glyph') {
@@ -142,6 +149,11 @@ function factFace(item) {
   if (level.kind === 'photo') {
     factPhoto.className = 'fact-photo';
     factPhoto.innerHTML = `<img src="img/${level.id}/${item.id}.jpg" alt="${esc(item.name)}">`;
+  } else if (level.kind === 'flag') {
+    // a round frame would crop the flag, so this one is a rounded rectangle
+    factPhoto.className = 'fact-photo is-flag';
+    factPhoto.style.background = '';
+    factPhoto.innerHTML = `<img src="img/${level.id}/${item.id}.svg" alt="${esc(item.name)}">`;
   } else if (level.kind === 'glyph') {
     factPhoto.className = 'fact-photo is-glyph';
     factPhoto.style.background = `linear-gradient(150deg, ${item.color}, ${shade(item.color, .35)})`;
@@ -156,22 +168,45 @@ function factFace(item) {
 /* =============================================================
    Home screen
    ============================================================= */
+function levelCard(lv, i) {
+  const btn = document.createElement('button');
+  btn.className = 'level-card';
+  btn.style.setProperty('--a', lv.theme[0]);
+  btn.style.setProperty('--b', lv.theme[1]);
+  btn.style.animationDelay = `${i * 45}ms`;
+  btn.innerHTML = `
+    <span class="level-emoji" aria-hidden="true">${lv.emoji}</span>
+    <span class="level-name">${esc(lv.title)}</span>
+    <span class="level-blurb">${esc(lv.blurb)}</span>
+    <span class="level-count">${lv.items.length} cards</span>`;
+  btn.addEventListener('click', () => openLevel(lv.id));
+  return btn;
+}
+
+/* Two shelves. The big-kid levels have far more cards on a much wider
+   board, so they are kept apart rather than mixed in — a three-year-old
+   should not land on twenty flags by tapping the wrong tile. */
 function buildHome() {
   levelGrid.innerHTML = '';
-  LEVELS.forEach((lv, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'level-card';
-    btn.style.setProperty('--a', lv.theme[0]);
-    btn.style.setProperty('--b', lv.theme[1]);
-    btn.style.animationDelay = `${i * 45}ms`;
-    btn.innerHTML = `
-      <span class="level-emoji" aria-hidden="true">${lv.emoji}</span>
-      <span class="level-name">${esc(lv.title)}</span>
-      <span class="level-blurb">${esc(lv.blurb)}</span>
-      <span class="level-count">${lv.items.length} cards</span>`;
-    btn.addEventListener('click', () => openLevel(lv.id));
-    levelGrid.appendChild(btn);
-  });
+  let n = 0;
+
+  const shelf = (tier, title, note) => {
+    const levels = LEVELS.filter(lv => lv.tier === tier);
+    if (!levels.length) return;
+
+    const head = document.createElement('div');
+    head.className = 'shelf-head';
+    head.innerHTML = `<h2>${esc(title)}</h2><p>${esc(note)}</p>`;
+    levelGrid.appendChild(head);
+
+    const row = document.createElement('div');
+    row.className = 'shelf-row';
+    levels.forEach(lv => row.appendChild(levelCard(lv, n++)));
+    levelGrid.appendChild(row);
+  };
+
+  shelf('little', 'First adventures', 'Nice and gentle — 3 to 6 pairs');
+  shelf('big', 'Big kid challenges', 'Bigger boards — 6 to 10 pairs');
 }
 
 function goHome() {
@@ -216,7 +251,7 @@ function openLevel(id) {
    Board building
    ============================================================= */
 function buildRound() {
-  const cfg = ROUNDS[roundIndex];
+  const cfg = rounds()[roundIndex];
 
   // top up the pool so cards don't repeat until all have appeared
   if (pool.length < cfg.pairs) pool = shuffle(level.items);
@@ -298,7 +333,7 @@ function onTileClick(tile, item) {
       first = null;
       busy = false;
 
-      if (matched === ROUNDS[roundIndex].pairs) setTimeout(finishRound, 1400);
+      if (matched === rounds()[roundIndex].pairs) setTimeout(finishRound, 1400);
     }, 420);
 
   } else {
@@ -344,7 +379,7 @@ function showFact(item) {
    Round + game completion
    ============================================================= */
 function finishRound() {
-  const last = roundIndex === ROUNDS.length - 1;
+  const last = roundIndex === rounds().length - 1;
 
   trophyEmoji.textContent = last ? '🏆' : '🎉';
   curtainTitle.textContent = last ? 'You did it!' : 'Round complete!';
@@ -373,7 +408,7 @@ function finishRound() {
    ============================================================= */
 curtainBtn.addEventListener('click', () => {
   curtain.hidden = true;
-  roundIndex = (roundIndex + 1) % ROUNDS.length;
+  roundIndex = (roundIndex + 1) % rounds().length;
   if (roundIndex === 0) pool = [];         // fresh game → reshuffle everyone
   buildRound();
 });
