@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Wonderflip — A Matching Game for Little Explorers</title>
+<meta name="description" content="A gentle memory matching game for ages 3–5: scientists, dinosaurs, planets, animals, bugs, tools, vehicles, weather, numbers, letters and colors.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+</head>
+<body>
+
+<div class="sky" aria-hidden="true">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  <span class="twinkle t1"></span><span class="twinkle t2"></span><span class="twinkle t3"></span>
+  <span class="twinkle t4"></span><span class="twinkle t5"></span><span class="twinkle t6"></span>
+</div>
+
+<!-- ================= HOME SCREEN ================= -->
+<section class="home" id="home">
+  <header class="home-head">
+    <div class="home-mark" aria-hidden="true">🧩</div>
+    <h1>Wonderflip</h1>
+    <p>Pick an adventure!</p>
+  </header>
+
+  <div class="level-grid" id="levelGrid"></div>
+
+  <footer class="home-foot">
+    <button class="chip-btn" id="homeSoundBtn" aria-pressed="true">
+      <svg class="ic-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4v-5Z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+      <svg class="ic-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4v-5Z"/><path d="m16 9.5 5 5m0-5-5 5"/></svg>
+      <span class="snd-label">Sound on</span>
+    </button>
+    <p class="grown-up">For grown-ups: every level has 3 rounds and gets a little bigger each time.</p>
+  </footer>
+</section>
+
+<!-- ================= GAME SCREEN ================= -->
+<div class="shell" id="gameScreen" hidden>
+
+  <main class="stage">
+    <header class="topbar">
+      <button class="back-btn" id="backBtn" title="Back to all levels">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 19l-7-7 7-7"/></svg>
+        <span>All levels</span>
+      </button>
+
+      <div class="brand">
+        <div class="brand-mark" id="brandMark" aria-hidden="true">🔬</div>
+        <div class="brand-text">
+          <h1 id="levelTitle">Star Scientists</h1>
+          <p id="levelSub">Round 1 &middot; Find the pairs!</p>
+        </div>
+      </div>
+
+      <div class="hud">
+        <div class="pips" id="pips" role="status" aria-label="Pairs found"></div>
+        <button class="icon-btn" id="soundBtn" aria-pressed="true" title="Sound on or off">
+          <svg class="ic-on" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4v-5Z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+          <svg class="ic-off" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4v-5Z"/><path d="m16 9.5 5 5m0-5-5 5"/></svg>
+        </button>
+        <button class="icon-btn" id="restartBtn" title="Play this level again">
+          <svg viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.3-5.4"/><path d="M19.9 4.6v4.6h-4.6"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="board-wrap">
+      <div class="board" id="board" role="grid" aria-label="Matching game board"></div>
+    </div>
+
+    <p class="hint" id="hint">Tap a card to see what is hiding!</p>
+  </main>
+
+  <aside class="panel" id="panel" aria-live="polite">
+    <div class="panel-idle" id="panelIdle">
+      <div class="idle-art" aria-hidden="true">
+        <span class="idle-ring"></span>
+        <span class="idle-emoji" id="idleEmoji">🔭</span>
+      </div>
+      <h2 id="idleTitle">Who will you meet?</h2>
+      <p id="idleText">Find two cards that look the same, and something wonderful will pop up right here.</p>
+      <ul class="idle-list">
+        <li><span>✨</span> <span id="idleCount">8 to discover</span></li>
+        <li><span>⭐</span> 3 rounds to play</li>
+        <li><span>🔊</span> Tap “Say it again” to listen</li>
+      </ul>
+    </div>
+
+    <article class="card-fact" id="fact" hidden>
+      <div class="fact-photo" id="factPhoto"></div>
+      <p class="fact-role" id="factRole"></p>
+      <h2 class="fact-name" id="factName"></h2>
+      <p class="fact-years" id="factYears"></p>
+      <div class="fact-bubble"><p id="factText"></p></div>
+      <button class="say-btn" id="sayBtn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4v-5Z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        Say it again
+      </button>
+    </article>
+  </aside>
+</div>
+
+<!-- ================= ROUND COMPLETE ================= -->
+<div class="curtain" id="curtain" hidden>
+  <div class="curtain-card">
+    <div class="trophy" aria-hidden="true">
+      <span class="trophy-glow"></span>
+      <span class="trophy-emoji" id="trophyEmoji">🎉</span>
+    </div>
+    <h2 id="curtainTitle">You did it!</h2>
+    <p id="curtainText">You found every pair.</p>
+    <div class="stars" id="curtainStars" aria-hidden="true"></div>
+    <div class="curtain-btns">
+      <button class="big-btn" id="curtainBtn">Next round →</button>
+      <button class="ghost-btn" id="curtainHomeBtn">Pick another adventure</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script src="js/speech.js"></script>
+<script src="data/scientists.js"></script>
+<script src="data/dinosaurs.js"></script>
+<script src="data/planets.js"></script>
+<script src="data/animals.js"></script>
+<script src="data/insects.js"></script>
+<script src="data/tools.js"></script>
+<script src="data/vehicles.js"></script>
+<script src="data/weather.js"></script>
+<script src="data/numbers.js"></script>
+<script src="data/letters.js"></script>
+<script src="data/colors.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

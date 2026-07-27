@@ -1,0 +1,24 @@
+# Wonderflip is plain static files — nothing to build, so Netlify just
+# publishes the repository root as-is.
+[build]
+  publish = "."
+  command = ""
+
+# The level picker uses hash routing (#dinosaurs), so every path is really
+# index.html. No SPA rewrite is needed for that, but a direct hit on an
+# unknown path should still land somewhere friendly rather than on a 404
+# a child can't read their way out of.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
