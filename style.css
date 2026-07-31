@@ -88,12 +88,14 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
    HOME SCREEN
    ============================================================ */
 .home{
-  position:relative; z-index:1; min-height:100dvh;
+  position:relative; z-index:1; height:100dvh;
   display:flex; flex-direction:column; align-items:center;
   padding:clamp(20px,4vmin,52px) clamp(16px,3vw,40px) clamp(16px,3vmin,32px);
   gap:clamp(18px,3vmin,36px);
   overflow-y:auto;
 }
+
+.home-head,.level-grid,.home-foot{ flex:0 0 auto; }
 
 .home-head{ text-align:center; animation:rise .55s var(--ease-soft); }
 
