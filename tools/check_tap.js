@@ -192,12 +192,21 @@ function tileDeclarations(prop) {
   let m;
   while ((m = ruleRe.exec(cssCode)) !== null) {
     const selectors = m[1].trim().split(',').map(s => s.trim());
-    // a bare `.tile`, or `.tile` with state classes — anything that lands
-    // on a face-down card. `.tile *` and descendants are handled below.
-    if (!selectors.some(s => /^\.tile(\.[\w-]+)*$/.test(s))) continue;
+    /* Anything that can style the tile element itself, whatever its
+       specificity: a bare `.tile`, `.tile` with state classes, and any
+       compound or descendant selector ENDING at the tile — `.board .tile`,
+       `.shell .tile.flipped`. A higher-specificity ancestor selector beats
+       the guard rule outright, so ignoring those would leave the exact
+       override this check exists to catch invisible.
+
+       Deliberately excluded: selectors ending in a descendant or child of
+       the tile (`.tile *`, `.tile .face`), which style something else. */
+    const hitsTile = selectors.some(s =>
+      /(^|[\s>+~])\.tile(\.[\w-]+)*(:[\w-]+(\([^)]*\))?)*$/.test(s));
+    if (!hitsTile) continue;
     const declRe = new RegExp(`(^|[;\\s])${prop}\\s*:\\s*([^;}]+)`, 'gi');
     let d;
-    while ((d = declRe.exec(m[2])) !== null) found.push(d[2].trim());
+    while ((d = declRe.exec(m[2])) !== null) found.push(d[2].trim().replace(/\s*!important$/i, ''));
   }
   return found;
 }
