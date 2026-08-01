@@ -41,6 +41,10 @@
 
      PLAYWRIGHT_PATH=/path/to/node_modules node tools/check_tap.js
      CHECK_TAP_ALLOW_SKIP=1 node tools/check_tap.js
+
+   Exit codes: 0 everything ran and passed, 1 something failed, 2 the
+   source guards passed but the browser half was deliberately skipped.
+   Anything treating 0 as "safe to ship" stays honest that way.
    ============================================================= */
 
 const fs = require('fs');
@@ -65,24 +69,50 @@ console.log('Source guards\n');
 /* Strip comments so a rule that only appears in prose cannot pass. */
 const cssCode = css.replace(/\/\*[\s\S]*?\*\//g, '');
 
-/* A media query only counts as a gate if it *narrows* to a hovering
-   pointer. Merely containing the text `hover:hover` is not enough, and
-   reading it that loosely is how a guard rots without anyone noticing:
+/* A media query only counts as a gate if EVERY way it can match narrows
+   to a hovering pointer. Substring-matching `hover:hover` is not enough;
+   read that loosely and the guard rots without anyone noticing:
 
-     @media not (hover:hover)              — the exact opposite
-     @media (hover:hover), (pointer:coarse) — the comma lets touch back in
-     @media (hover:hover)                   — no pointer:fine, so a stylus
-                                              or a TV remote still hovers
+     @media not (hover:hover)                      — the exact opposite
+     @media (hover:hover), (pointer:coarse)        — a list is an OR
+     @media ((hover:hover) and (pointer:fine))
+            or (pointer:coarse)                    — so is Level 4 `or`
+     @media (hover:hover)                          — no pointer:fine, so a
+                                                     stylus still hovers
 
-   So require both features, reject negation, and reject a comma — a
-   media query list is an OR, and one hover-capable branch cannot vouch
-   for the others. */
+   A media query list is an OR of branches, and so is `or`. One safe
+   branch cannot vouch for the others, so every branch must independently
+   demand both `hover:hover` and `pointer:fine`. Splitting on the commas
+   and `or`s and requiring each piece to qualify handles the safe list
+   `(h) and (p), (h) and (p)` too, which a blanket comma ban rejected. */
 function isHoverGate(head) {
-  const q = head.replace(/^@media\s*/i, '').trim();
   if (!/^@media\b/i.test(head)) return false;
-  if (/\bnot\b/i.test(q)) return false;
-  if (q.includes(',')) return false;
-  return /\(\s*hover\s*:\s*hover\s*\)/.test(q) && /\(\s*pointer\s*:\s*fine\s*\)/.test(q);
+  const q = head.replace(/^@media\s*/i, '').trim().toLowerCase();
+  if (!q) return false;
+
+  // `not` and `only` invert or restrict in ways this check will not
+  // reason about; refuse rather than guess.
+  if (/\bnot\b/.test(q)) return false;
+
+  /* Split into OR branches at top nesting level: commas and bare `or`.
+     `and` binds tighter and stays inside a branch. */
+  const branches = [];
+  let depth = 0, buf = '';
+  for (let i = 0; i < q.length; i++) {
+    const c = q[i];
+    if (c === '(') depth++;
+    if (c === ')') depth--;
+    if (depth === 0 && c === ',') { branches.push(buf); buf = ''; continue; }
+    if (depth === 0 && q.startsWith('or', i) && /[\s)]/.test(q[i - 1] ?? ' ') && /[\s(]/.test(q[i + 2] ?? ' ')) {
+      branches.push(buf); buf = ''; i += 1; continue;
+    }
+    buf += c;
+  }
+  branches.push(buf);
+
+  const wants = (s, feature, value) =>
+    new RegExp(`\\(\\s*${feature}\\s*:\\s*${value}\\s*\\)`).test(s);
+  return branches.every(b => b.trim() && wants(b, 'hover', 'hover') && wants(b, 'pointer', 'fine'));
 }
 
 /* Every `:hover` rule must sit inside such a gate. Walk the file tracking
@@ -123,6 +153,19 @@ const PARSER_CASES = [
   ['.a:hover{color:red}', 1, 'a bare hover rule is caught'],
   ['@media (min-width:10px){ @media (hover:hover) and (pointer:fine){ .a:hover{c:1} } }', 0, 'a nested gate passes'],
   ['@media (hover:hover) and (pointer:fine){ .a{c:1} } .b:hover{c:1}', 1, 'a rule after a closed gate is caught'],
+  // Media Queries Level 4 `or` is another OR, and one safe branch does not
+  // make the query safe
+  ['@media ((hover:hover) and (pointer:fine)) or (pointer:coarse){ .a:hover{c:1} }', 1,
+    'a Level 4 `or` with an unsafe branch is rejected'],
+  ['@media ((hover:hover) and (pointer:fine)) or ((hover:hover) and (pointer:fine)){ .a:hover{c:1} }', 0,
+    'a Level 4 `or` where every branch is safe passes'],
+  // CSS keywords are case-insensitive, so a valid gate must not be rejected
+  // just for being shouted
+  ['@media (HOVER:HOVER) and (POINTER:FINE){ .a:hover{c:1} }', 0, 'an uppercase gate still passes'],
+  ['@media (hover:hover) and (pointer:fine), (hover:hover) and (pointer:fine){ .a:hover{c:1} }', 0,
+    'a comma list whose every branch is safe passes'],
+  ['@media only screen and (hover:hover) and (pointer:fine){ .a:hover{c:1} }', 0,
+    '`only screen` with both features passes'],
 ];
 for (const [src, expected, label] of PARSER_CASES) {
   const got = ungatedHoverSelectors(src).length;
@@ -136,15 +179,43 @@ assert(
   ungated.length ? `ungated: ${ungated.join(' | ')}` : ''
 );
 
-/* The tile rule itself carries the touch guards. */
-const tileRule = (cssCode.match(/\n\.tile\s*\{([\s\S]*?)\}/) || [])[1] || '';
-assert(/touch-action\s*:\s*manipulation/.test(tileRule),
-  '.tile sets touch-action:manipulation (no double-tap-zoom delay)',
-  'not found in the .tile rule');
-assert(/-webkit-touch-callout\s*:\s*none/.test(tileRule),
-  '.tile disables the long-press callout');
-assert(/(^|[^-])user-select\s*:\s*none/.test(tileRule),
-  '.tile disables text selection on a long press');
+/* The tile rule carries the touch guards — and nothing later may undo
+   them. Checking only the first `.tile{}` block would miss a rule further
+   down the file setting `touch-action:auto` back, which is precisely how
+   this bug would return on an engine we cannot drive here. So collect
+   every declaration of each property that lands on a plain `.tile`
+   selector, and require the LAST one — the one that wins the cascade
+   among equal-specificity rules — to be the guard. */
+function tileDeclarations(prop) {
+  const found = [];
+  const ruleRe = /([^{}]+)\{([^{}]*)\}/g;
+  let m;
+  while ((m = ruleRe.exec(cssCode)) !== null) {
+    const selectors = m[1].trim().split(',').map(s => s.trim());
+    // a bare `.tile`, or `.tile` with state classes — anything that lands
+    // on a face-down card. `.tile *` and descendants are handled below.
+    if (!selectors.some(s => /^\.tile(\.[\w-]+)*$/.test(s))) continue;
+    const declRe = new RegExp(`(^|[;\\s])${prop}\\s*:\\s*([^;}]+)`, 'gi');
+    let d;
+    while ((d = declRe.exec(m[2])) !== null) found.push(d[2].trim());
+  }
+  return found;
+}
+
+const guards = [
+  ['touch-action', 'manipulation', '.tile sets touch-action:manipulation (no double-tap-zoom delay)'],
+  ['-webkit-touch-callout', 'none', '.tile disables the long-press callout'],
+  ['user-select', 'none', '.tile disables text selection on a long press'],
+  ['-webkit-user-select', 'none', '.tile disables text selection on a long press (webkit)'],
+];
+for (const [prop, want, label] of guards) {
+  const decls = tileDeclarations(prop);
+  const winner = decls[decls.length - 1];
+  assert(decls.length > 0 && winner === want, label,
+    decls.length === 0
+      ? `no ${prop} declaration on .tile at all`
+      : `last ${prop} on .tile is "${winner}" (saw ${decls.length}: ${decls.join(', ')})`);
+}
 
 assert(/\.tile\s*\*\s*\{[^}]*-webkit-user-drag\s*:\s*none/.test(cssCode),
   'everything inside a tile refuses to start a drag');
@@ -188,12 +259,14 @@ try {
   }
 }
 
-/* Skipping the browser half is allowed for a quick local run, but it must
-   never look like success. Unless CHECK_TAP_ALLOW_SKIP is set, a missing
-   Playwright is a failure — otherwise this file would print "All checks
-   passed" while every behavioural assertion sat untested, which is worse
-   than having no test at all. */
+/* Skipping the browser half must never be mistakable for a full pass.
+   A missing Playwright fails outright. CHECK_TAP_ALLOW_SKIP=1 lets a
+   developer run just the source guards while iterating, and that run
+   exits 2 — success is 0, real failure is 1, and a partial run is
+   neither. Automation checking `exit == 0` therefore cannot be fooled
+   into treating a source-only run as a green regression check. */
 const allowSkip = process.env.CHECK_TAP_ALLOW_SKIP === '1';
+const EXIT_PARTIAL = 2;
 
 const IPADS = [
   ['iPad portrait',          810, 1080],
@@ -321,6 +394,28 @@ async function live() {
     assert(state.sel.trim() === '', 'a long press on a card selects no text', `selected: "${state.sel.trim()}"`);
     assert(await tile.evaluate(el => el.classList.contains('flipped')),
       'a card still flips after a long, resting press');
+
+    /* The first press lands on the card back. The picture is what actually
+       tempts iOS into a callout or a drag, so press it too now that it is
+       face up, and confirm the touch really is landing on the image. */
+    const imgBox = await tile.locator('.face-front img').boundingBox();
+    assert(!!imgBox, 'the flipped card exposes its picture to press');
+    if (imgBox) {
+      const ix = imgBox.x + imgBox.width / 2, iy = imgBox.y + imgBox.height / 2;
+      const onImage = await page.evaluate(([px, py]) =>
+        document.elementFromPoint(px, py)?.tagName === 'IMG', [ix, iy]);
+      assert(onImage, 'the press point is over the card picture itself');
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: ix, y: iy }] });
+      await page.waitForTimeout(1100);
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await page.waitForTimeout(400);
+      const onImg = await page.evaluate(() => ({
+        drag: window.__drag, ctx: window.__ctx, sel: String(getSelection()),
+      }));
+      assert(onImg.drag === false, 'a long press on the card picture never starts a drag');
+      assert(onImg.ctx === false, 'a long press on the card picture never raises the callout menu');
+      assert(onImg.sel.trim() === '', 'a long press on the card picture selects no text');
+    }
     await ctx.close();
   }
 
@@ -345,11 +440,15 @@ async function live() {
         // assertion above is the only place it can be checked
         calloutSupported: CSS.supports('-webkit-touch-callout', 'none'),
         userSelect: get(el, 'user-select') || get(el, '-webkit-user-select'),
-        imgDrag: img ? get(img, '-webkit-user-drag') : 'none',
-        imgDraggable: img ? img.draggable : false,
+        // no `img ? ... : 'none'` — a missing image must not hand back the
+        // exact value the assertion is looking for and pass vacuously
+        hasImg: !!img,
+        imgDrag: img ? get(img, '-webkit-user-drag') : null,
+        imgDraggable: img ? img.draggable : null,
         hoverGated: !matchMedia('(hover:hover) and (pointer:fine)').matches,
       };
     });
+    assert(styles.hasImg, 'the flipped photo card actually rendered an image');
     assert(styles.touchAction === 'manipulation', 'computed touch-action is manipulation', styles.touchAction);
     if (styles.calloutSupported) {
       assert(styles.callout === 'none', 'computed -webkit-touch-callout is none', styles.callout);
@@ -382,7 +481,12 @@ async function live() {
     const matched = await page.locator('.tile.matched').count();
     assert(matched === 2, 'tapping a matching pair marks both cards matched', `matched ${matched}`);
 
-    // the panel must actually carry the discovery, not merely be visible
+    /* The panel must carry the card that was actually matched. A merely
+       non-empty name would also be satisfied by stale content left over
+       from an earlier round, so compare it to the pair we tapped. */
+    const expectedName = await page.locator('.tile').nth(pair[0])
+      .evaluate(el => el.querySelector('.face-front .tag, .swatch-name')?.textContent.trim()
+                   ?? el.querySelector('.glyph-char')?.textContent.trim() ?? '');
     const panel = await page.evaluate(() => ({
       shown: !document.getElementById('fact').hidden,
       name: document.getElementById('factName').textContent.trim(),
@@ -390,7 +494,9 @@ async function live() {
       idleHidden: document.getElementById('panelIdle').hidden,
     }));
     assert(panel.shown && panel.idleHidden, 'a match opens the fact panel and closes the idle panel');
-    assert(panel.name.length > 0, 'the fact panel shows the name of what was found', `name was "${panel.name}"`);
+    assert(expectedName.length > 0 && panel.name === expectedName,
+      'the fact panel names the card that was actually matched',
+      `card said "${expectedName}", panel said "${panel.name}"`);
     assert(panel.text.length > 0, 'the fact panel shows its fact', `text was "${panel.text}"`);
     await ctx.close();
   }
@@ -437,11 +543,16 @@ async function live() {
     const ring = await page.evaluate(() => {
       const el = document.activeElement;
       const cs = getComputedStyle(el);
-      return { matches: el.matches(':focus-visible'), width: cs.outlineWidth, style: cs.outlineStyle };
+      return {
+        matches: el.matches(':focus-visible'),
+        width: cs.outlineWidth, style: cs.outlineStyle, color: cs.outlineColor,
+      };
     });
-    assert(ring.matches && ring.style !== 'none' && parseFloat(ring.width) > 0,
+    // a fully transparent outline is not a visible one
+    const opaque = !/^(transparent|rgba\([^)]*,\s*0(\.0+)?\))$/.test(ring.color);
+    assert(ring.matches && ring.style !== 'none' && parseFloat(ring.width) > 0 && opaque,
       'a keyboard-focused tile renders a visible focus outline',
-      `:focus-visible=${ring.matches} outline=${ring.width} ${ring.style}`);
+      `:focus-visible=${ring.matches} outline=${ring.width} ${ring.style} ${ring.color}`);
 
     await t2.focus();
     assert(await t2.evaluate(el => el === document.activeElement), 'a tile can take keyboard focus');
@@ -491,9 +602,11 @@ async function live() {
     console.log(`${failures} check${failures === 1 ? '' : 's'} failed.`);
     process.exit(1);
   }
-  console.log(allowSkip && !playwright
-    ? 'Source guards passed. The browser checks were skipped.'
-    : 'All checks passed.');
+  if (allowSkip && !playwright) {
+    console.log('PARTIAL: source guards passed, browser checks were skipped (exit 2).');
+    process.exit(EXIT_PARTIAL);
+  }
+  console.log('All checks passed.');
 })().catch(err => {
   console.error(err);
   process.exit(1);
