@@ -162,7 +162,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   background:radial-gradient(circle, rgba(255,255,255,.3) 0%, transparent 60%);
 }
 
-.level-card:hover{ transform:translateY(-6px) scale(1.03); box-shadow:var(--shadow-lg); }
+@media (hover:hover) and (pointer:fine){
+  .level-card:hover{ transform:translateY(-6px) scale(1.03); box-shadow:var(--shadow-lg); }
+}
 .level-card:active{ transform:translateY(-1px) scale(.98); }
 
 .level-emoji{
@@ -170,7 +172,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   filter:drop-shadow(0 4px 8px rgba(20,10,50,.3));
   transition:transform .25s var(--ease-pop);
 }
-.level-card:hover .level-emoji{ transform:scale(1.15) rotate(-8deg); }
+@media (hover:hover) and (pointer:fine){
+  .level-card:hover .level-emoji{ transform:scale(1.15) rotate(-8deg); }
+}
 
 .level-name{ font-family:"Baloo 2",sans-serif; font-weight:800; font-size:clamp(1.05rem,2.3vmin,1.45rem); line-height:1.15; }
 .level-blurb{ font-weight:700; font-size:clamp(.72rem,1.5vmin,.88rem); opacity:.9; line-height:1.35; }
@@ -195,7 +199,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   transition:transform .18s var(--ease-pop), box-shadow .18s;
 }
 .chip-btn svg{ width:1.2em; height:1.2em; fill:none; stroke:currentColor; stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; }
-.chip-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+@media (hover:hover) and (pointer:fine){
+  .chip-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+}
 .chip-btn .ic-off{ display:none; }
 .chip-btn[aria-pressed="false"]{ color:var(--ink-soft); }
 .chip-btn[aria-pressed="false"] .ic-on{ display:none; }
@@ -226,7 +232,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   box-shadow:var(--shadow-sm); transition:transform .18s var(--ease-pop), box-shadow .18s;
 }
 .back-btn svg{ width:1.15em; height:1.15em; fill:none; stroke:currentColor; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; }
-.back-btn:hover{ transform:translateX(-3px); box-shadow:var(--shadow-md); }
+@media (hover:hover) and (pointer:fine){
+  .back-btn:hover{ transform:translateX(-3px); box-shadow:var(--shadow-md); }
+}
 .back-btn:active{ transform:scale(.95); }
 
 .brand{ display:flex; align-items:center; gap:clamp(10px,1.2vw,16px); min-width:0; margin-right:auto; }
@@ -272,7 +280,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   box-shadow:var(--shadow-sm); transition:transform .18s var(--ease-pop), box-shadow .18s;
 }
 .icon-btn svg{ width:54%; height:54%; fill:none; stroke:currentColor; stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; }
-.icon-btn:hover{ transform:translateY(-2px) scale(1.06); box-shadow:var(--shadow-md); }
+@media (hover:hover) and (pointer:fine){
+  .icon-btn:hover{ transform:translateY(-2px) scale(1.06); box-shadow:var(--shadow-md); }
+}
 .icon-btn:active{ transform:translateY(1px) scale(.95); }
 .icon-btn .ic-off{ display:none; }
 .icon-btn[aria-pressed="false"] .ic-on{ display:none; }
@@ -294,7 +304,27 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   position:relative; aspect-ratio:1; border:0; padding:0; background:none;
   cursor:pointer; perspective:1000px; -webkit-tap-highlight-color:transparent;
   animation:deal .5s var(--ease-pop) backwards;
+
+  /* Touch, on iPad especially. Without `manipulation` Safari holds every
+     tap back ~300ms while it waits to see whether a second one is coming
+     and the gesture should be a double-tap zoom instead — and a tap that
+     rolls a few pixels, which is most taps from a three-year-old, gets
+     handed to the scroller and never becomes a click at all. */
+  touch-action:manipulation;
+
+  /* A child rests a finger on a card rather than tapping it cleanly. Left
+     alone, iOS answers that press with the image callout ("Copy", "Save
+     to Photos") or starts dragging the picture out of the card, and the
+     tap it interrupted never lands. Nothing here is selectable text or a
+     picture worth saving, so refuse all three. */
+  -webkit-touch-callout:none;
+  -webkit-user-select:none; user-select:none;
 }
+
+/* The tap has to count wherever it lands. Every layer inside a card is
+   decoration, so none of them may start its own drag or selection and
+   quietly swallow the press meant for the button underneath. */
+.tile *{ -webkit-user-drag:none; -webkit-touch-callout:none; }
 @keyframes deal{
   from{ opacity:0; transform:translateY(26px) scale(.72) rotate(-6deg); }
   to  { opacity:1; transform:none; }
@@ -338,9 +368,16 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
 }
 @keyframes spin-slow{ to{ transform:rotate(360deg); } }
 
-.tile:hover .tile-inner{ transform:translateY(-6px) scale(1.03); }
-.tile.flipped:hover .tile-inner,
-.tile.matched:hover .tile-inner{ transform:rotateY(180deg); }
+/* Hover belongs to mice. A touch screen has no hover, so iOS invents one:
+   the first tap on a hoverable element only applies :hover, and the child
+   has to tap a second time before anything actually happens. Asking for a
+   real hovering pointer keeps the lift on desktop and gives the iPad a
+   card that turns over on the first try. */
+@media (hover:hover) and (pointer:fine){
+  .tile:hover .tile-inner{ transform:translateY(-6px) scale(1.03); }
+  .tile.flipped:hover .tile-inner,
+  .tile.matched:hover .tile-inner{ transform:rotateY(180deg); }
+}
 .tile:active .tile-inner{ transform:scale(.96); }
 .tile.flipped:active .tile-inner{ transform:rotateY(180deg) scale(.96); }
 
@@ -355,6 +392,7 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   width:100%; flex:1 1 auto; min-height:0; object-fit:cover; object-position:center 22%;
   border-radius:calc(var(--card-r) - 6px) calc(var(--card-r) - 6px) 0 0;
   background:#EFEAFB;
+  -webkit-user-drag:none;                 /* a card is for turning over, not dragging */
 }
 .face-front .tag{
   flex:0 0 auto; padding:clamp(3px,.7vmin,7px) 4px;
@@ -382,6 +420,7 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   object-fit:contain; display:block;
   border-radius:3px;
   box-shadow:0 2px 7px rgba(43,35,80,.3);
+  -webkit-user-drag:none;
 }
 
 /* --- card front: numbers & letters (kind 'glyph') --- */
@@ -587,7 +626,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   box-shadow:var(--shadow-sm); transition:transform .18s var(--ease-pop), box-shadow .18s;
 }
 .say-btn svg{ width:1.15em; height:1.15em; fill:none; stroke:currentColor; stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; }
-.say-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+@media (hover:hover) and (pointer:fine){
+  .say-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+}
 .say-btn:active{ transform:translateY(1px) scale(.97); }
 
 /* ---------- curtain (round complete) ---------- */
@@ -638,7 +679,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   box-shadow:0 6px 0 var(--btn-deep), 0 20px 34px -12px rgba(43,35,80,.6);
   transition:transform .16s var(--ease-pop), box-shadow .16s;
 }
-.big-btn:hover{ transform:translateY(-3px); box-shadow:0 9px 0 var(--btn-deep), 0 26px 40px -12px rgba(43,35,80,.65); }
+@media (hover:hover) and (pointer:fine){
+  .big-btn:hover{ transform:translateY(-3px); box-shadow:0 9px 0 var(--btn-deep), 0 26px 40px -12px rgba(43,35,80,.65); }
+}
 .big-btn:active{ transform:translateY(4px); box-shadow:0 2px 0 var(--btn-deep), 0 12px 20px -10px rgba(43,35,80,.5); }
 
 .ghost-btn{
@@ -649,7 +692,9 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   text-decoration-color:color-mix(in srgb, var(--theme-a) 45%, transparent);
   transition:color .16s, background .16s;
 }
-.ghost-btn:hover{ color:var(--theme-a); background:rgba(43,35,80,.05); }
+@media (hover:hover) and (pointer:fine){
+  .ghost-btn:hover{ color:var(--theme-a); background:rgba(43,35,80,.05); }
+}
 
 #confetti{ position:fixed; inset:0; z-index:50; pointer-events:none; }
 

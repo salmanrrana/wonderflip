@@ -5,3 +5,6 @@ Thumbs.db
 .vscode/
 __pycache__/
 *.pyc
+
+# Bones workflow evidence (local only)
+.bones/

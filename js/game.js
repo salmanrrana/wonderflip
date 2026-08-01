@@ -96,9 +96,12 @@ function shade(hex, t) {
 /* =============================================================
    Card faces — one renderer per level kind
    ============================================================= */
+/* Pictures inside a card carry draggable="false": dragging one out of the
+   card is never what a child meant, and on a touch screen the drag that
+   starts eats the tap that was trying to turn the card over. */
 function faceFront(item) {
   if (level.kind === 'photo') {
-    return `<img src="img/${level.id}/${item.id}.jpg" alt="${esc(item.name)}" loading="eager" decoding="async">
+    return `<img src="img/${level.id}/${item.id}.jpg" alt="${esc(item.name)}" loading="eager" decoding="async" draggable="false">
             <span class="tag">${esc(item.name)}</span>`;
   }
 
@@ -107,7 +110,7 @@ function faceFront(item) {
   // canton off half of them and make two flags look alike.
   if (level.kind === 'flag') {
     return `<span class="flag-face">
-              <img src="img/${level.id}/${item.id}.svg" alt="${esc(item.name)}" loading="eager" decoding="async">
+              <img src="img/${level.id}/${item.id}.svg" alt="${esc(item.name)}" loading="eager" decoding="async" draggable="false">
             </span>
             <span class="tag">${esc(item.name)}</span>`;
   }
