@@ -17,15 +17,30 @@
         finger — how most small children touch a screen — raised the image
         callout or started a drag, and the tap underneath was lost.
 
-   Part one below reads the source and proves each guard is still there.
-   It needs nothing but node, so it always runs.
+   Part one reads the source and proves each guard is still there. It
+   needs nothing but node, so it always runs.
 
-   Part two actually taps. It drives a real browser at iPad viewports
-   with touch input and asserts the card flips. That needs Playwright,
-   which this project does not depend on, so it is skipped — loudly, and
-   without failing — when Playwright is not installed:
+   Part two actually taps: a real browser at five iPad viewports, real
+   touch events through CDP, asserting the card turns over.
+
+   What part two cannot do, and why part one is not redundant: the browser
+   here is Chromium, and the bug was Safari's. Chromium does not synthesise
+   hover on tap and has no image callout, so removing the fixes would leave
+   these taps green. The live half proves the game still plays under a
+   finger — that nothing here broke the flip, the match, the keyboard or
+   the mouse. The source and computed-style assertions are what actually
+   pin the three iOS guards in place. Both halves are load-bearing.
+
+   Part two needs Playwright, which this project does not depend on. A
+   missing Playwright FAILS rather than skips, because a test that prints
+   "All checks passed" while testing nothing is worse than no test:
 
      npm i playwright && npx playwright install chromium
+
+   To run it against a copy installed elsewhere, or to accept a partial run:
+
+     PLAYWRIGHT_PATH=/path/to/node_modules node tools/check_tap.js
+     CHECK_TAP_ALLOW_SKIP=1 node tools/check_tap.js
    ============================================================= */
 
 const fs = require('fs');
@@ -50,9 +65,28 @@ console.log('Source guards\n');
 /* Strip comments so a rule that only appears in prose cannot pass. */
 const cssCode = css.replace(/\/\*[\s\S]*?\*\//g, '');
 
-/* Every `:hover` rule must sit inside a hover-capable media query.
-   Walk the file tracking brace depth, remembering the depth at which
-   each `@media (hover:hover)` block opened. */
+/* A media query only counts as a gate if it *narrows* to a hovering
+   pointer. Merely containing the text `hover:hover` is not enough, and
+   reading it that loosely is how a guard rots without anyone noticing:
+
+     @media not (hover:hover)              — the exact opposite
+     @media (hover:hover), (pointer:coarse) — the comma lets touch back in
+     @media (hover:hover)                   — no pointer:fine, so a stylus
+                                              or a TV remote still hovers
+
+   So require both features, reject negation, and reject a comma — a
+   media query list is an OR, and one hover-capable branch cannot vouch
+   for the others. */
+function isHoverGate(head) {
+  const q = head.replace(/^@media\s*/i, '').trim();
+  if (!/^@media\b/i.test(head)) return false;
+  if (/\bnot\b/i.test(q)) return false;
+  if (q.includes(',')) return false;
+  return /\(\s*hover\s*:\s*hover\s*\)/.test(q) && /\(\s*pointer\s*:\s*fine\s*\)/.test(q);
+}
+
+/* Every `:hover` rule must sit inside such a gate. Walk the file tracking
+   brace depth, remembering the depth at which each gate opened. */
 function ungatedHoverSelectors(source) {
   const out = [];
   let depth = 0;
@@ -69,7 +103,7 @@ function ungatedHoverSelectors(source) {
     // at-rule is only recognisable once it is trimmed
     const head = m[1].trim();
     if (head.startsWith('@')) {
-      if (/hover\s*:\s*hover/.test(head)) hoverBlockDepths.push(depth);
+      if (isHoverGate(head)) hoverBlockDepths.push(depth);
       depth++;
       continue;
     }
@@ -77,6 +111,22 @@ function ungatedHoverSelectors(source) {
     depth++;
   }
   return out;
+}
+
+/* The parser is the only part of this file that always runs, so it is
+   worth proving it rejects what it claims to reject. */
+const PARSER_CASES = [
+  ['@media (hover:hover) and (pointer:fine){ .a:hover{color:red} }', 0, 'a real gate passes'],
+  ['@media not (hover:hover){ .a:hover{color:red} }', 1, 'negated gate is rejected'],
+  ['@media (hover:hover), (pointer:coarse){ .a:hover{color:red} }', 1, 'comma-list gate is rejected'],
+  ['@media (hover:hover){ .a:hover{color:red} }', 1, 'gate without pointer:fine is rejected'],
+  ['.a:hover{color:red}', 1, 'a bare hover rule is caught'],
+  ['@media (min-width:10px){ @media (hover:hover) and (pointer:fine){ .a:hover{c:1} } }', 0, 'a nested gate passes'],
+  ['@media (hover:hover) and (pointer:fine){ .a{c:1} } .b:hover{c:1}', 1, 'a rule after a closed gate is caught'],
+];
+for (const [src, expected, label] of PARSER_CASES) {
+  const got = ungatedHoverSelectors(src).length;
+  assert(got === expected, `parser self-test: ${label}`, `expected ${expected} ungated, got ${got}`);
 }
 
 const ungated = ungatedHoverSelectors(cssCode);
@@ -119,14 +169,31 @@ assert(undraggable, 'every card-face image carries draggable="false"',
 /* -------------------------------------------------------------
    Part 2 — a real tap, in a real browser, at iPad size
    ------------------------------------------------------------- */
+/* Resolve Playwright from this project or from wherever PLAYWRIGHT_PATH
+   points, and nowhere else. An earlier version fell back to a hardcoded
+   /tmp directory, which is both non-hermetic and a place any other
+   process can write — exactly the wrong thing for a file that decides
+   whether the game ships. */
 let playwright = null;
+let playwrightError = null;
 try {
   playwright = require('playwright');
-} catch {
-  try {
-    playwright = require(require.resolve('playwright', { paths: [process.env.PLAYWRIGHT_PATH || '/tmp/wf-test/node_modules'] }));
-  } catch { /* not installed — handled below */ }
+} catch (err) {
+  if (process.env.PLAYWRIGHT_PATH) {
+    try {
+      playwright = require(require.resolve('playwright', { paths: [process.env.PLAYWRIGHT_PATH] }));
+    } catch (err2) { playwrightError = err2; }
+  } else {
+    playwrightError = err;
+  }
 }
+
+/* Skipping the browser half is allowed for a quick local run, but it must
+   never look like success. Unless CHECK_TAP_ALLOW_SKIP is set, a missing
+   Playwright is a failure — otherwise this file would print "All checks
+   passed" while every behavioural assertion sat untested, which is worse
+   than having no test at all. */
+const allowSkip = process.env.CHECK_TAP_ALLOW_SKIP === '1';
 
 const IPADS = [
   ['iPad portrait',          810, 1080],
@@ -200,56 +267,99 @@ async function live() {
     await ctx.close();
   }
 
-  /* --- a tap that rolls under the finger still counts --- */
+  /* --- a tap that rolls under the finger still counts ---
+     Driven through CDP so the touch is a real one the gesture recognizer
+     sees, not a synthetic TouchEvent the page merely receives. An earlier
+     version dispatched untrusted events and then tapped cleanly at the end
+     coordinates, so the clean tap did all the work and a cancelled drift
+     would still have passed. */
   {
     const ctx = await iPad(810, 1080);
     const page = await open(ctx);
     const tile = page.locator('.tile').first();
     const [x, y] = await centre(tile);
-    await page.touchscreen.tap(x, y);        // baseline: the tap lands
-    await page.waitForTimeout(500);
-    const t2 = page.locator('.tile').nth(1);
-    const [x2, y2] = await centre(t2);
-    // drift a few pixels between touchstart and touchend, as a small hand does
-    await page.evaluate(([px, py]) => {
-      const el = document.elementFromPoint(px, py);
-      const touch = (tx, ty) => [new Touch({ identifier: 1, target: el, clientX: tx, clientY: ty })];
-      const ev = (type, tx, ty) => el.dispatchEvent(new TouchEvent(type, {
-        bubbles: true, cancelable: true,
-        touches: type === 'touchend' ? [] : touch(tx, ty),
-        changedTouches: touch(tx, ty), targetTouches: type === 'touchend' ? [] : touch(tx, ty),
-      }));
-      ev('touchstart', px, py); ev('touchmove', px + 4, py + 3); ev('touchend', px + 4, py + 3);
-    }, [x2, y2]);
-    await page.touchscreen.tap(x2 + 4, y2 + 3);
-    await page.waitForTimeout(600);
-    const flipped = await t2.evaluate(el => el.classList.contains('flipped') || el.classList.contains('matched'));
-    assert(flipped, 'a tap that drifts a few pixels still flips the card');
+    const cdp = await ctx.newCDPSession(page);
+    const touch = (type, pts) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts });
+    await touch('touchStart', [{ x, y }]);
+    await touch('touchMove',  [{ x: x + 3, y: y + 2 }]);
+    await touch('touchMove',  [{ x: x + 5, y: y + 4 }]);
+    await touch('touchEnd',   []);
+    await page.waitForTimeout(700);
+    const flipped = await tile.evaluate(el => el.classList.contains('flipped'));
+    assert(flipped, 'a real touch that drifts a few pixels still flips the card',
+      flipped ? '' : `class was "${await tile.getAttribute('class')}"`);
     await ctx.close();
   }
 
-  /* --- press-and-hold does not raise a drag, and the card still flips --- */
+  /* --- a long press does not raise a drag or a selection, and still flips ---
+     Also a real touch: press, hold well past the long-press threshold, lift
+     without moving. The earlier version held the *mouse* on a card it had
+     already flipped with a separate tap, which tested neither the flip nor
+     the long-press behaviour. */
   {
     const ctx = await iPad(810, 1080);
     const page = await open(ctx);
     const tile = page.locator('.tile').first();
-    const [x, y] = await centre(tile);
-    const dragStarted = await page.evaluate(() => {
+    await page.evaluate(() => {
       window.__drag = false;
+      window.__ctx = false;
       addEventListener('dragstart', () => { window.__drag = true; }, true);
-      return false;
+      addEventListener('contextmenu', () => { window.__ctx = true; }, true);
     });
-    await page.touchscreen.tap(x, y);        // flip it so a picture is showing
+    const [x, y] = await centre(tile);
+    const cdp = await ctx.newCDPSession(page);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+    await page.waitForTimeout(1100);         // a long, resting press
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     await page.waitForTimeout(700);
-    const [fx, fy] = await centre(tile);
-    await page.mouse.move(fx, fy);
-    await page.mouse.down();
-    await page.waitForTimeout(900);          // a long, resting press
-    await page.mouse.up();
-    const drag = await page.evaluate(() => window.__drag);
-    assert(dragStarted === false && drag === false, 'press-and-hold on a card never starts a drag');
-    const sel = await page.evaluate(() => String(getSelection()));
-    assert(sel.trim() === '', 'press-and-hold on a card selects no text', `selected: "${sel.trim()}"`);
+
+    const state = await page.evaluate(() => ({
+      drag: window.__drag, ctx: window.__ctx, sel: String(getSelection()),
+    }));
+    assert(state.drag === false, 'a long press on a card never starts a drag');
+    assert(state.ctx === false, 'a long press on a card never raises the callout menu');
+    assert(state.sel.trim() === '', 'a long press on a card selects no text', `selected: "${state.sel.trim()}"`);
+    assert(await tile.evaluate(el => el.classList.contains('flipped')),
+      'a card still flips after a long, resting press');
+    await ctx.close();
+  }
+
+  /* --- the CSS really does refuse the drag, as the computed style sees it ---
+     Chromium cannot reproduce Safari's hover synthesis or its image callout,
+     so the properties that defend against them are asserted here against the
+     live computed style rather than only against the source text. */
+  {
+    const ctx = await iPad(810, 1080);
+    const page = await open(ctx);
+    const tile = page.locator('.tile').first();
+    await page.touchscreen.tap(...await centre(tile));
+    await page.waitForTimeout(700);
+    const styles = await tile.evaluate(el => {
+      const img = el.querySelector('.face-front img');
+      const get = (e, p) => getComputedStyle(e).getPropertyValue(p).trim();
+      return {
+        touchAction: get(el, 'touch-action'),
+        callout: get(el, '-webkit-touch-callout'),
+        // -webkit-touch-callout is WebKit-only; Chromium drops the property
+        // entirely, so there is nothing to read here and the source
+        // assertion above is the only place it can be checked
+        calloutSupported: CSS.supports('-webkit-touch-callout', 'none'),
+        userSelect: get(el, 'user-select') || get(el, '-webkit-user-select'),
+        imgDrag: img ? get(img, '-webkit-user-drag') : 'none',
+        imgDraggable: img ? img.draggable : false,
+        hoverGated: !matchMedia('(hover:hover) and (pointer:fine)').matches,
+      };
+    });
+    assert(styles.touchAction === 'manipulation', 'computed touch-action is manipulation', styles.touchAction);
+    if (styles.calloutSupported) {
+      assert(styles.callout === 'none', 'computed -webkit-touch-callout is none', styles.callout);
+    } else {
+      console.log('note  this engine has no -webkit-touch-callout; only the source guard covers it');
+    }
+    assert(styles.userSelect === 'none', 'computed user-select is none', styles.userSelect);
+    assert(styles.imgDrag === 'none', 'computed -webkit-user-drag on the card image is none', styles.imgDrag);
+    assert(styles.imgDraggable === false, 'the card image is not draggable');
+    assert(styles.hoverGated, 'a touch device does not match the hover gate');
     await ctx.close();
   }
 
@@ -271,8 +381,17 @@ async function live() {
     await page.waitForTimeout(700);
     const matched = await page.locator('.tile.matched').count();
     assert(matched === 2, 'tapping a matching pair marks both cards matched', `matched ${matched}`);
-    const factShown = await page.locator('#fact').isVisible();
-    assert(factShown, 'a match opens the fact panel');
+
+    // the panel must actually carry the discovery, not merely be visible
+    const panel = await page.evaluate(() => ({
+      shown: !document.getElementById('fact').hidden,
+      name: document.getElementById('factName').textContent.trim(),
+      text: document.getElementById('factText').textContent.trim(),
+      idleHidden: document.getElementById('panelIdle').hidden,
+    }));
+    assert(panel.shown && panel.idleHidden, 'a match opens the fact panel and closes the idle panel');
+    assert(panel.name.length > 0, 'the fact panel shows the name of what was found', `name was "${panel.name}"`);
+    assert(panel.text.length > 0, 'the fact panel shows its fact', `text was "${panel.text}"`);
     await ctx.close();
   }
 
@@ -285,27 +404,64 @@ async function live() {
     await page.waitForTimeout(900);
 
     const tile = page.locator('.tile').first();
-    const lifts = await tile.evaluate(el => {
-      // a fine pointer is what a desktop chromium reports, so the guarded
-      // hover rule must still match here
-      return matchMedia('(hover:hover) and (pointer:fine)').matches;
-    });
-    assert(lifts, 'desktop still reports a hover-capable fine pointer');
+    assert(await page.evaluate(() => matchMedia('(hover:hover) and (pointer:fine)').matches),
+      'desktop still reports a hover-capable fine pointer');
+
+    /* the lift is what the hover gate is protecting, so measure the card
+       actually moving rather than trusting the media query alone */
+    const restY = await tile.evaluate(el => el.querySelector('.tile-inner').getBoundingClientRect().top);
+    await tile.hover();
+    await page.waitForTimeout(400);
+    const hoverY = await tile.evaluate(el => el.querySelector('.tile-inner').getBoundingClientRect().top);
+    assert(hoverY < restY - 1, 'a mouse hover still lifts the card on desktop',
+      `top went ${restY.toFixed(1)} → ${hoverY.toFixed(1)}`);
 
     await tile.click();
     await page.waitForTimeout(600);
     assert(await tile.evaluate(el => el.classList.contains('flipped')),
       'desktop click still flips a card');
 
-    // keyboard: focus the next tile and press Enter
+    /* keyboard: Enter on one tile, Space on another, and a real focus ring.
+       :focus-visible answers to how focus arrived, so the ring has to be
+       reached by tabbing — a scripted focus() does not count as keyboard
+       interaction and would report no ring on a page that has one. */
     const t2 = page.locator('.tile').nth(1);
+    const tabbedToTile = await (async () => {
+      for (let i = 0; i < 40; i++) {
+        await page.keyboard.press('Tab');
+        if (await page.evaluate(() => document.activeElement?.classList.contains('tile'))) return true;
+      }
+      return false;
+    })();
+    assert(tabbedToTile, 'a tile is reachable by tabbing');
+    const ring = await page.evaluate(() => {
+      const el = document.activeElement;
+      const cs = getComputedStyle(el);
+      return { matches: el.matches(':focus-visible'), width: cs.outlineWidth, style: cs.outlineStyle };
+    });
+    assert(ring.matches && ring.style !== 'none' && parseFloat(ring.width) > 0,
+      'a keyboard-focused tile renders a visible focus outline',
+      `:focus-visible=${ring.matches} outline=${ring.width} ${ring.style}`);
+
     await t2.focus();
-    const focused = await t2.evaluate(el => el === document.activeElement);
-    assert(focused, 'a tile can take keyboard focus');
+    assert(await t2.evaluate(el => el === document.activeElement), 'a tile can take keyboard focus');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(600);
     assert(await t2.evaluate(el => el.classList.contains('flipped') || el.classList.contains('matched')),
       'Enter activates a focused tile');
+
+    /* Space needs a card the game is not already busy with: a wrong pair is
+       flipping back for over a second, and during that the board ignores
+       input by design. Reload for a clean board rather than racing it. */
+    await page.reload({ waitUntil: 'load' });
+    await page.waitForSelector('.tile');
+    await page.waitForTimeout(900);
+    const t3 = page.locator('.tile').first();
+    await t3.focus();
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(600);
+    assert(await t3.evaluate(el => el.classList.contains('flipped') || el.classList.contains('matched')),
+      'Space activates a focused tile');
     await ctx.close();
   }
 
@@ -314,14 +470,20 @@ async function live() {
 }
 
 (async () => {
+  console.log('\nLive taps at iPad size\n');
   if (playwright) {
-    console.log('\nLive taps at iPad size\n');
     await live();
-  } else {
-    console.log('\nLive taps at iPad size\n');
+  } else if (allowSkip) {
     console.log('skip  Playwright is not installed, so no browser was driven.');
-    console.log('      The source guards above still ran. To run the real taps:');
-    console.log('        npm i playwright && npx playwright install chromium');
+    console.log('      Only the source guards above ran — this run proves nothing');
+    console.log('      about how the game behaves under a real finger.');
+  } else {
+    bad('the browser half of this check actually ran',
+      `Playwright could not be loaded, so none of the tap behaviour was tested.\n` +
+      `      ${playwrightError ? String(playwrightError.message).split('\n')[0] : 'not installed'}\n` +
+      `      Install it:            npm i playwright && npx playwright install chromium\n` +
+      `      Or point at a copy:    PLAYWRIGHT_PATH=/path/to/node_modules node tools/check_tap.js\n` +
+      `      Or accept a partial run explicitly: CHECK_TAP_ALLOW_SKIP=1 node tools/check_tap.js`);
   }
 
   console.log('');
@@ -329,7 +491,9 @@ async function live() {
     console.log(`${failures} check${failures === 1 ? '' : 's'} failed.`);
     process.exit(1);
   }
-  console.log('All checks passed.');
+  console.log(allowSkip && !playwright
+    ? 'Source guards passed. The browser checks were skipped.'
+    : 'All checks passed.');
 })().catch(err => {
   console.error(err);
   process.exit(1);
