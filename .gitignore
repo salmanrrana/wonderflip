@@ -3,6 +3,7 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+node_modules/
 __pycache__/
 *.pyc
 

@@ -1,0 +1,20 @@
+{
+  "name": "wonderflip",
+  "private": true,
+  "scripts": {
+    "prepare": "node tools/install-hooks.mjs",
+    "check:staged": "node tools/check-staged.mjs",
+    "lint": "eslint js data tools eslint.config.mjs",
+    "format:check": "prettier --check package.json eslint.config.mjs tools/install-hooks.mjs",
+    "test": "node tools/check_levels.js",
+    "test:browser": "node tools/check_tap.js",
+    "check:fast": "npm run lint && npm run format:check && npm test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "playwright": "^1.60.0",
+    "prettier": "^3.8.2"
+  }
+}

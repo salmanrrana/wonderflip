@@ -129,12 +129,16 @@ tools/            build-time only, never shipped to the browser
 ### Checking your work
 
 ```bash
-node tools/check_levels.js
+npm install
+npm run check:fast
 ```
 
 Loads the data files exactly as the browser does and proves each level plays:
 every card has its art on disk, no duplicate or missing ids, no board that asks
 for more tiles than fit, and no round wanting more pairs than the level has.
+Installation also enables the tracked pre-commit hook. The optional real-browser
+tap check stays separate as `npm run test:browser`; install Chromium once with
+`npx playwright install chromium` before running it.
 
 ## Adding a level
 
