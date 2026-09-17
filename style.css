@@ -423,6 +423,16 @@ h1,h2,h3,.big-btn,.fact-name{ font-family:"Baloo 2", "Nunito", sans-serif; }
   -webkit-user-drag:none;
 }
 
+/* Bundled illustrations keep their whole silhouette on a shared white mat. */
+.illustration-face{
+  flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center;
+  padding:clamp(8px,1.5vmin,18px);
+}
+.illustration-face img{
+  width:100%; height:100%; object-fit:contain; background:none;
+}
+.fact-photo.is-illustration img{ object-fit:contain; padding:14%; }
+
 /* --- card front: numbers & letters (kind 'glyph') --- */
 .glyph-face{
   flex:1 1 auto; min-height:0; display:flex; flex-direction:column;

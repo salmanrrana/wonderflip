@@ -9,6 +9,7 @@
      theme    two colours that tint the whole level
      kind     'photo'  → card face is img/<id>/<item>.jpg
               'flag'   → card face is img/<id>/<item>.svg, shown whole
+              'illustration' → bundled SVG picture on a plain mat
               'glyph'  → card face is drawn (numbers / letters)
               'swatch' → card face is a solid colour (colors)
      items    the cards (see data/*.js)
@@ -106,6 +107,21 @@ const LEVELS = [
     blurb: 'Every color of the rainbow',
     theme: ['#0E7C7B', '#5FD9C8'], kind: 'swatch', items: cards(() => COLORS)
   },
+  {
+    id: 'ocean', title: 'Ocean Animals', emoji: '🐬',
+    blurb: 'Discover life under the waves',
+    theme: ['#126B8A', '#2B7A8E'], kind: 'illustration', items: cards(() => OCEAN)
+  },
+  {
+    id: 'fruit', title: 'Fruit', emoji: '🍓',
+    blurb: 'A basket of juicy discoveries',
+    theme: ['#AD3544', '#B84F60'], kind: 'illustration', items: cards(() => FRUIT)
+  },
+  {
+    id: 'vegetables', title: 'Vegetables', emoji: '🥕',
+    blurb: 'Explore the kitchen garden',
+    theme: ['#347444', '#4C7B39'], kind: 'illustration', items: cards(() => VEGETABLES)
+  },
 
   /* ---- big-kid shelf: more cards, bigger boards ---- */
   {
@@ -141,6 +157,18 @@ const LEVELS = [
     blurb: 'Brave people who went first',
     idleTitle: 'Who will you meet?',
     theme: ['#1A6B6B', '#5FD0C0'], kind: 'photo', items: cards(() => EXPLORERS),
+    tier: 'big'
+  },
+  {
+    id: 'birds', title: 'Birds', emoji: '🦜',
+    blurb: 'Feathered friends near and far',
+    theme: ['#886029', '#936B2E'], kind: 'illustration', items: cards(() => BIRDS),
+    tier: 'big'
+  },
+  {
+    id: 'sports', title: 'Sports', emoji: '⚽',
+    blurb: 'Match the games we play',
+    theme: ['#AE472A', '#B65832'], kind: 'illustration', items: cards(() => SPORTS),
     tier: 'big'
   }
 ];

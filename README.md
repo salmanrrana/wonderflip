@@ -3,9 +3,10 @@
 **Flip a card, find a friend, learn a thing.**
 
 A memory matching game for **ages 3–5** — real scientists, dinosaurs, planets,
-animals, bugs, tools, vehicles, weather, numbers, letters and colors — plus a
+animals, bugs, tools, vehicles, weather, numbers, letters, colors, ocean animals,
+fruit and vegetables — plus a
 **big kid shelf for ages 5+** with world flags, state flags, landmarks,
-instruments and explorers on much larger boards.
+instruments, explorers, birds and sports on much larger boards.
 
 Every time a child finds a pair, a **fact card appears in the side panel** —
 deliberately placed away from the play area so it never covers the cards or
@@ -47,6 +48,9 @@ start where those finish and run on a much wider board.
 | 🔢 Numbers | 8 | 1–8, each numeral shown with countable dots |
 | 🔤 Letters | 8 | S A T P I N M D, name *and* sound together |
 | 🎨 Colors | 8 | Eight colors, each with a name and an object |
+| 🐬 Ocean Animals | 12 | Sea creatures, from jellyfish to whales |
+| 🍓 Fruit | 12 | Familiar fruit and how it grows |
+| 🥕 Vegetables | 12 | Roots, leaves, pods, and other garden foods |
 
 Three rounds that grow gently: 3 pairs (3 × 2), 4 pairs (4 × 2), 6 pairs (4 × 3).
 
@@ -54,23 +58,25 @@ Three rounds that grow gently: 3 pairs (3 × 2), 4 pairs (4 × 2), 6 pairs (4 ×
 
 | Level | Cards | What it's for |
 |---|---|---|
-| 🌍 World Flags | 20 | Flags from every continent, with capitals |
+| 🌍 World Flags | 46 | Flags around the world, including England and Scotland |
 | 🦅 State Flags | 16 | The boldest US state flags |
 | 🗼 World Landmarks | 16 | Famous places and how old they are |
 | 🎺 Instruments | 16 | Instrument families and the sounds they make |
 | 🧭 Explorers | 16 | People who went first, by land, sea, ice and space |
+| 🦜 Birds | 12 | Feathered friends and what makes them special |
+| ⚽ Sports | 12 | Balls, rackets, and games from around the world |
 
 Three bigger rounds: 6 pairs (4 × 3), 8 pairs (4 × 4), 10 pairs (5 × 4).
 
 On both shelves cards are drawn from a shuffled pool, so nothing repeats until
 everything has appeared.
 
-**Why those flags and not others.** Roughly twenty US state flags are a seal on
-a plain blue field, and a good few national flags differ only in stripe order.
-At card size those are indistinguishable, which does not make the game *harder* —
-it makes it broken, because a child cannot tell a right flip from a wrong one.
-Both flag levels are curated down to designs that stay distinct at thumbnail
-size, which is also why State Flags has 16 cards rather than 50.
+World Flags includes similar designs for a closer-looking challenge. Each flag
+is shown whole, with its name underneath; Nepal keeps its distinctive shape.
+State Flags keeps its selection of 16 bold designs.
+
+All hidden cards within a level have identical backs, including the center
+of the badge. Colors only help identify a card after it has been flipped.
 
 ## Designed for small children
 
@@ -151,14 +157,15 @@ tap check stays separate as `npm run test:browser`; install Chromium once with
   id: 'mylevel', title: 'My Level', emoji: '🌟',
   blurb: 'One short line',
   theme: ['#2E9E5B', '#8FD14F'],   // tints the whole level
-  kind: 'photo',                   // 'photo' | 'flag' | 'glyph' | 'swatch'
+  kind: 'photo',                   // 'photo' | 'flag' | 'illustration' | 'glyph' | 'swatch'
   items: MYLEVEL,
   tier: 'little'                   // 'little' (3→6 pairs) | 'big' (6→10)
 }
 ```
 
 4. For `kind: 'photo'`, drop square images at `img/mylevel/<id>.jpg`; for
-   `kind: 'flag'`, drop `img/mylevel/<id>.svg` (shown whole, never cropped).
+   `kind: 'flag'` or `'illustration'`, drop `img/mylevel/<id>.svg`
+   (shown whole, never cropped). Illustrations use a plain white mat.
 5. Run `node tools/check_levels.js`.
 
 A `tier` of `'big'` needs at least 10 cards, since its last round deals 10
@@ -178,6 +185,7 @@ centre-crops to 640 × 640; pass `"focus": 0.35` on an item to lift the crop
 toward the top of the frame, which portraits usually need.
 
 Keep facts to one or two short sentences with a concrete image a preschooler
-can picture. `color` tints that card's back.
+can picture. `color` is for revealed glyphs, swatches, and their fact panels;
+never use item-specific colors on hidden card backs.
 
 Image credits are in [CREDITS.md](CREDITS.md).
