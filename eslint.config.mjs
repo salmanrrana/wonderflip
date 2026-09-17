@@ -21,20 +21,25 @@ export default [
     languageOptions: {
       globals: {
         ANIMALS: "readonly",
+        BIRDS: "readonly",
         COLORS: "readonly",
         DINOSAURS: "readonly",
         EXPLORERS: "readonly",
         FLAGS_USA: "readonly",
         FLAGS_WORLD: "readonly",
+        FRUIT: "readonly",
         INSECTS: "readonly",
         INSTRUMENTS: "readonly",
         LANDMARKS: "readonly",
         LETTERS: "readonly",
         NUMBERS: "readonly",
+        OCEAN: "readonly",
         PLANETS: "readonly",
         SCIENTISTS: "readonly",
+        SPORTS: "readonly",
         TOOLS: "readonly",
         VEHICLES: "readonly",
+        VEGETABLES: "readonly",
         WEATHER: "readonly",
       },
     },
@@ -79,7 +84,13 @@ export default [
   {
     files: ["tools/check_tap.js"],
     languageOptions: {
-      globals: { ...globals.node, ...globals.browser },
+      // These game globals are read inside Playwright's page.evaluate calls.
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+        LEVELS: "readonly",
+        openLevel: "readonly",
+      },
       sourceType: "commonjs",
     },
   },
