@@ -115,6 +115,13 @@ function faceFront(item) {
             <span class="tag">${esc(item.name)}</span>`;
   }
 
+  if (level.kind === 'illustration') {
+    return `<span class="illustration-face">
+              <img src="img/${level.id}/${item.id}.svg" alt="${esc(item.name)}" loading="eager" decoding="async" draggable="false">
+            </span>
+            <span class="tag">${esc(item.name)}</span>`;
+  }
+
   // glyph and swatch faces already carry their own label, so they get
   // no name tag underneath — it would just say the same thing twice.
   if (level.kind === 'glyph') {
@@ -134,11 +141,11 @@ function faceFront(item) {
           </span>`;
 }
 
-/* the card back — same atom-ish badge, tinted per item */
-function backIcon(color) {
+/* Every hidden card has the same badge: its color must not reveal a pair. */
+function backIcon() {
   return `
     <svg class="back-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-      <circle cx="32" cy="32" r="9" fill="${color}" opacity=".95"/>
+      <circle cx="32" cy="32" r="9" fill="#fff" opacity=".95"/>
       <ellipse cx="32" cy="32" rx="27" ry="11" stroke="#fff" stroke-width="3.4" opacity=".95"/>
       <ellipse cx="32" cy="32" rx="27" ry="11" stroke="#fff" stroke-width="3.4"
                opacity=".8" transform="rotate(60 32 32)"/>
@@ -161,6 +168,10 @@ function factFace(item) {
     factPhoto.className = 'fact-photo is-glyph';
     factPhoto.style.background = `linear-gradient(150deg, ${item.color}, ${shade(item.color, .35)})`;
     factPhoto.innerHTML = `<span class="fact-glyph">${esc(item.glyph)}</span>`;
+  } else if (level.kind === 'illustration') {
+    factPhoto.className = 'fact-photo is-illustration';
+    factPhoto.style.background = '';
+    factPhoto.innerHTML = `<img src="img/${level.id}/${item.id}.svg" alt="${esc(item.name)}">`;
   } else {
     factPhoto.className = 'fact-photo is-swatch';
     factPhoto.style.background = item.color;
@@ -278,7 +289,7 @@ function buildRound() {
     tile.setAttribute('aria-label', 'Hidden card. Tap to turn it over.');
     tile.innerHTML = `
       <span class="tile-inner">
-        <span class="face face-back">${backIcon(item.color)}</span>
+        <span class="face face-back">${backIcon()}</span>
         <span class="face face-front">${faceFront(item)}</span>
       </span>`;
     tile.addEventListener('click', () => onTileClick(tile, item));

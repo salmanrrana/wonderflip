@@ -61,7 +61,7 @@ if (!Array.isArray(LEVELS)) {
   process.exit(1);
 }
 const FIELDS = ['id', 'name', 'say', 'role', 'years', 'fact', 'color'];
-const EXT = { photo: 'jpg', flag: 'svg' };
+const EXT = { photo: 'jpg', flag: 'svg', illustration: 'svg' };
 
 let problems = 0;
 const bad = (msg) => { console.error(`FAIL  ${msg}`); problems++; };

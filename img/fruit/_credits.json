@@ -1,0 +1,86 @@
+[
+  {
+    "id": "apple",
+    "file": "1f34e.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f34e.svg"
+  },
+  {
+    "id": "banana",
+    "file": "1f34c.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f34c.svg"
+  },
+  {
+    "id": "grapes",
+    "file": "1f347.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f347.svg"
+  },
+  {
+    "id": "watermelon",
+    "file": "1f349.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f349.svg"
+  },
+  {
+    "id": "strawberry",
+    "file": "1f353.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f353.svg"
+  },
+  {
+    "id": "cherries",
+    "file": "1f352.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f352.svg"
+  },
+  {
+    "id": "peach",
+    "file": "1f351.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f351.svg"
+  },
+  {
+    "id": "pear",
+    "file": "1f350.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f350.svg"
+  },
+  {
+    "id": "pineapple",
+    "file": "1f34d.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f34d.svg"
+  },
+  {
+    "id": "kiwi",
+    "file": "1f95d.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f95d.svg"
+  },
+  {
+    "id": "lemon",
+    "file": "1f34b.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f34b.svg"
+  },
+  {
+    "id": "mango",
+    "file": "1f96d.svg",
+    "licence": "CC BY 4.0",
+    "author": "Twitter, Inc. and other contributors",
+    "page": "https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f96d.svg"
+  }
+]

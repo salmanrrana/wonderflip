@@ -5,15 +5,17 @@ Commons licence that permits reuse.
 
 Photographs were cropped square (subject-centred) and resized to 640 × 640.
 The flag levels — **World Flags** and **State Flags** — are the exception:
-they ship the original Commons SVGs, unmodified and uncropped. A flag
+they ship uncropped SVGs from Commons and the country-flags collection. A flag
 cropped to a square stops being that flag, and the shapes that make one
 tell apart from another are exactly what a square would cut off.
 
-Images come from two places:
+Images come from these sources:
 
 - **Wikimedia Commons** — <https://commons.wikimedia.org>
 - **Openverse** — <https://openverse.org>, restricted to CC0 and
   Public Domain Mark
+- **country-flags** — [repository](https://github.com/hampusborgos/country-flags), public-domain flag SVGs originally sourced from Commons
+- **Twemoji** — [version 16.0.1](https://github.com/jdecked/twemoji/tree/v16.0.1), by Twitter, Inc. and other contributors, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The 60 new illustrations are unmodified SVGs; the full license is in `img/twemoji-LICENSE-GRAPHICS`.
 
 Where a licence requires attribution (any CC BY / CC BY-SA row below), the
 author is named here, which is how attribution is provided for this work.
@@ -26,7 +28,7 @@ artwork from anywhere at all.
 Every image is stored in this repository. Nothing is hotlinked, so the game
 keeps working with no network and no card can ever break.
 
-Retrieved July 2026.
+Original images retrieved July 2026; expanded flags and illustrated levels retrieved September 2026.
 
 ---
 
@@ -159,30 +161,56 @@ All eight from Openverse.
 
 ## World Flags
 
-All 20 images are **public domain**, from Wikimedia Commons.
+All 46 images are **public domain**, from the sources linked below.
 
 | Card | Title | Author | License | Source |
 |---|---|---|---|---|
 | Argentina | Flag of Argentina | Manuel Belgrano | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Argentina.svg) |
+| Australia | Flag of Australia | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/au.svg) |
+| Bangladesh | Flag of Bangladesh | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/bd.svg) |
 | Bhutan | Flag of Bhutan | Unknown | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Bhutan.svg) |
 | Brazil | Flag of Brazil | Raimundo Teixeira Mendes | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Brazil.svg) |
 | Canada | Flag of Canada | Created by George F. G. Stanley / E Pluribus Anthony / User:Mzajac | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Canada.svg) |
+| China | Flag of China | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/cn.svg) |
+| Ecuador | Flag of Ecuador | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/ec.svg) |
+| Egypt | Flag of Egypt | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/eg.svg) |
+| England | Flag of England | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/gb-eng.svg) |
+| France | Flag of France | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/fr.svg) |
 | Germany | Flag of Germany | SKopp, User:Madden, and other users | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Germany.svg) |
+| Greece | Flag of Greece | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/gr.svg) |
+| Honduras | Flag of Honduras | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/hn.svg) |
 | India | Flag of India | Government of India | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_India.svg) |
+| Iran | Flag of Iran | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/ir.svg) |
+| Iraq | Flag of Iraq | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/iq.svg) |
+| Ireland | Flag of Ireland | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/ie.svg) |
 | Israel | Flag of Israel | Israel Belkind and Fanny Abramovitch (original) “The Provisional Council of State … | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Israel.svg) |
+| Italy | Flag of Italy | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/it.svg) |
 | Jamaica | Flag of Jamaica | by SKopp, and then manually edited by Zscout370, Madden and others | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Jamaica.svg) |
 | Japan | Flag of Japan | Unknown | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Japan.svg) |
 | Kenya | Flag of Kenya | Pumbaa80 | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Kenya.svg) |
 | Mexico | Flag of Mexico | Alex Covarrubias, 9 April 2006. Based on the arms by Juan Manuel Gabino Villascán | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Mexico.svg) |
 | Nepal | Flag of Nepal | Drawn by Pumbaa80, Achim1999 | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Nepal.svg) |
+| New Zealand | Flag of New Zealand | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/nz.svg) |
+| Nigeria | Flag of Nigeria | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/ng.svg) |
+| Norway | Flag of Norway | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/no.svg) |
+| Pakistan | Flag of Pakistan | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/pk.svg) |
+| Palestine | Flag of Palestine | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/ps.svg) |
 | Papua New Guinea | Flag of Papua New Guinea | Nightstallion | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Papua_New_Guinea.svg) |
+| Portugal | Flag of Portugal | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/pt.svg) |
+| Russia | Flag of Russia | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/ru.svg) |
+| Saudi Arabia | Flag of Saudi Arabia | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/sa.svg) |
+| Scotland | Flag of Scotland | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/gb-sct.svg) |
 | Seychelles | Flag of Seychelles | Vxb83 | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Seychelles.svg) |
 | South Africa | Flag of South Africa | Flag design by Frederick Brownell, image by Wikimedia Commons users | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_South_Africa.svg) |
+| South Korea | Flag of South Korea | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/kr.svg) |
+| Spain | Flag of Spain | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/es.svg) |
 | Sweden | Flag of Sweden | Jon Harald Søby and others | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Sweden.svg) |
 | Switzerland | Flag of Switzerland | Original: Unknown Vector: User:Marc Mongenet Credits: User:-xfi- User:Zscout370 | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Switzerland.svg) |
 | Turkey | Flag of Turkey | David Benbennick (original author) | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_Turkey.svg) |
 | United Kingdom | Flag of the United Kingdom | Original: Acts of Union 1800 Vector: Yaddah | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_the_United_Kingdom_(3-5).svg) |
 | United States | Flag of the United States | Uploaded by Dbenbenn; edited by users such as Zscout370, Jacobolus, Indolences, and … | Public domain | [link](https://commons.wikimedia.org/wiki/File:Flag_of_the_United_States.svg) |
+| Vietnam | Flag of Vietnam | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/vn.svg) |
+| Zimbabwe | Flag of Zimbabwe | Wikimedia Commons / country-flags contributors | Public domain | [link](https://github.com/hampusborgos/country-flags/blob/main/svg/zw.svg) |
 
 ## State Flags
 
@@ -276,4 +304,100 @@ All 16 images are from Wikimedia Commons, under the licences listed.
 | Trumpet | Firebird trumpet | Indofunk | CC BY-SA 4.0 | [link](https://commons.wikimedia.org/wiki/File:Firebird_trumpet.jpg) |
 | Violin | German, maple Violin | Pianoplonkers | CC BY-SA 3.0 | [link](https://commons.wikimedia.org/wiki/File:German,_maple_Violin.JPG) |
 | Xylophone | Bass Marimba from Emil Richards Collection | Xylosmygame | CC BY-SA 3.0 | [link](https://commons.wikimedia.org/wiki/File:Bass_Marimba_from_Emil_Richards_Collection.jpg) |
+
+
+## Ocean Animals
+
+All 12 images are from the sources linked below, under the licences listed.
+
+| Card | Title | Author | License | Source |
+|---|---|---|---|---|
+| Crab | 1f980 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f980.svg) |
+| Dolphin | 1f42c | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f42c.svg) |
+| Jellyfish | 1fabc | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1fabc.svg) |
+| Lobster | 1f99e | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f99e.svg) |
+| Octopus | 1f419 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f419.svg) |
+| Pufferfish | 1f421 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f421.svg) |
+| Seal | 1f9ad | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f9ad.svg) |
+| Shark | 1f988 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f988.svg) |
+| Shrimp | 1f990 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f990.svg) |
+| Squid | 1f991 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f991.svg) |
+| Tropical Fish | 1f420 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f420.svg) |
+| Whale | 1f433 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f433.svg) |
+
+## Fruit
+
+All 12 images are from the sources linked below, under the licences listed.
+
+| Card | Title | Author | License | Source |
+|---|---|---|---|---|
+| Apple | 1f34e | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f34e.svg) |
+| Banana | 1f34c | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f34c.svg) |
+| Cherries | 1f352 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f352.svg) |
+| Grapes | 1f347 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f347.svg) |
+| Kiwi Fruit | 1f95d | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f95d.svg) |
+| Lemon | 1f34b | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f34b.svg) |
+| Mango | 1f96d | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f96d.svg) |
+| Peach | 1f351 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f351.svg) |
+| Pear | 1f350 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f350.svg) |
+| Pineapple | 1f34d | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f34d.svg) |
+| Strawberry | 1f353 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f353.svg) |
+| Watermelon | 1f349 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f349.svg) |
+
+## Vegetables
+
+All 12 images are from the sources linked below, under the licences listed.
+
+| Card | Title | Author | License | Source |
+|---|---|---|---|---|
+| Bell Pepper | 1fad1 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1fad1.svg) |
+| Broccoli | 1f966 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f966.svg) |
+| Carrot | 1f955 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f955.svg) |
+| Corn | 1f33d | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f33d.svg) |
+| Cucumber | 1f952 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f952.svg) |
+| Eggplant | 1f346 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f346.svg) |
+| Garlic | 1f9c4 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f9c4.svg) |
+| Lettuce | 1f96c | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f96c.svg) |
+| Onion | 1f9c5 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f9c5.svg) |
+| Peas | 1fadb | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1fadb.svg) |
+| Potato | 1f954 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f954.svg) |
+| Tomato | 1f345 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f345.svg) |
+
+## Birds
+
+All 12 images are from the sources linked below, under the licences listed.
+
+| Card | Title | Author | License | Source |
+|---|---|---|---|---|
+| Dodo | 1f9a4 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f9a4.svg) |
+| Duck | 1f986 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f986.svg) |
+| Eagle | 1f985 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f985.svg) |
+| Flamingo | 1f9a9 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f9a9.svg) |
+| Goose | 1fabf | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1fabf.svg) |
+| Owl | 1f989 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f989.svg) |
+| Parrot | 1f99c | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f99c.svg) |
+| Peacock | 1f99a | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f99a.svg) |
+| Penguin | 1f427 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f427.svg) |
+| Rooster | 1f413 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f413.svg) |
+| Swan | 1f9a2 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f9a2.svg) |
+| Turkey | 1f983 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f983.svg) |
+
+## Sports
+
+All 12 images are from the sources linked below, under the licences listed.
+
+| Card | Title | Author | License | Source |
+|---|---|---|---|---|
+| Badminton | 1f3f8 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3f8.svg) |
+| Baseball | 26be | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/26be.svg) |
+| Basketball | 1f3c0 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3c0.svg) |
+| Bowling | 1f3b3 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3b3.svg) |
+| Cricket | 1f3cf | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3cf.svg) |
+| Golf | 26f3 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/26f3.svg) |
+| Ice Hockey | 1f3d2 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3d2.svg) |
+| Rugby | 1f3c9 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3c9.svg) |
+| Soccer | 26bd | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/26bd.svg) |
+| Table Tennis | 1f3d3 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3d3.svg) |
+| Tennis | 1f3be | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3be.svg) |
+| Volleyball | 1f3d0 | Twitter, Inc. and other contributors | CC BY 4.0 | [link](https://github.com/jdecked/twemoji/blob/v16.0.1/assets/svg/1f3d0.svg) |
 

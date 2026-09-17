@@ -25,6 +25,11 @@ TITLES = {
     "landmarks": "World Landmarks",
     "instruments": "Musical Instruments",
     "explorers": "Explorers",
+    "ocean": "Ocean Animals",
+    "fruit": "Fruit",
+    "vegetables": "Vegetables",
+    "birds": "Birds",
+    "sports": "Sports",
 }
 
 
@@ -96,9 +101,9 @@ def main(levels):
 
         licences = {r["licence"] for r in rows}
         if licences == {"Public domain"}:
-            print(f"All {len(rows)} images are **public domain**, from Wikimedia Commons.\n")
+            print(f"All {len(rows)} images are **public domain**, from the sources linked below.\n")
         else:
-            print(f"All {len(rows)} images are from Wikimedia Commons, "
+            print(f"All {len(rows)} images are from the sources linked below, "
                   "under the licences listed.\n")
 
         # same column order as the hand-written sections above

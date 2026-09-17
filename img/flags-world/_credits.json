@@ -138,5 +138,187 @@
     "licence": "Public domain",
     "author": "Uploaded by <a href=\"//commons.wikimedia.org/wiki/User:Dbenbenn\" title=\"User:Dbenbenn\">Dbenbenn</a>; edited by users such as <a href=\"//commons.wikimedia.org/wiki/User:Zscout370\" title=\"User:Zscout370\">Zscout370</a>, <a href=\"//commons.wikimedia.org/wiki/User:Jacobolus\" title=\"User:Jacobolus\">Jacobolus</a>, <a href=\"//commons.wikimedia.org/wiki/User:Indolences\" title=\"User:Indolences\">Indolences</a>, and <a href=\"//commons.wikimedia.org/wiki/User:Technion\" title=\"User:Technion\">Technion</a>.",
     "page": "https://commons.wikimedia.org/wiki/File:Flag_of_the_United_States.svg"
+  },
+  {
+    "id": "pakistan",
+    "file": "Flag of Pakistan.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/pk.svg"
+  },
+  {
+    "id": "ecuador",
+    "file": "Flag of Ecuador.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/ec.svg"
+  },
+  {
+    "id": "palestine",
+    "file": "Flag of Palestine.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/ps.svg"
+  },
+  {
+    "id": "russia",
+    "file": "Flag of Russia.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/ru.svg"
+  },
+  {
+    "id": "china",
+    "file": "Flag of China.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/cn.svg"
+  },
+  {
+    "id": "honduras",
+    "file": "Flag of Honduras.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/hn.svg"
+  },
+  {
+    "id": "zimbabwe",
+    "file": "Flag of Zimbabwe.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/zw.svg"
+  },
+  {
+    "id": "egypt",
+    "file": "Flag of Egypt.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/eg.svg"
+  },
+  {
+    "id": "saudi-arabia",
+    "file": "Flag of Saudi Arabia.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/sa.svg"
+  },
+  {
+    "id": "iran",
+    "file": "Flag of Iran.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/ir.svg"
+  },
+  {
+    "id": "iraq",
+    "file": "Flag of Iraq.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/iq.svg"
+  },
+  {
+    "id": "vietnam",
+    "file": "Flag of Vietnam.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/vn.svg"
+  },
+  {
+    "id": "australia",
+    "file": "Flag of Australia.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/au.svg"
+  },
+  {
+    "id": "norway",
+    "file": "Flag of Norway.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/no.svg"
+  },
+  {
+    "id": "england",
+    "file": "Flag of England.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/gb-eng.svg"
+  },
+  {
+    "id": "ireland",
+    "file": "Flag of Ireland.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/ie.svg"
+  },
+  {
+    "id": "scotland",
+    "file": "Flag of Scotland.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/gb-sct.svg"
+  },
+  {
+    "id": "spain",
+    "file": "Flag of Spain.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/es.svg"
+  },
+  {
+    "id": "portugal",
+    "file": "Flag of Portugal.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/pt.svg"
+  },
+  {
+    "id": "france",
+    "file": "Flag of France.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/fr.svg"
+  },
+  {
+    "id": "italy",
+    "file": "Flag of Italy.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/it.svg"
+  },
+  {
+    "id": "south-korea",
+    "file": "Flag of South Korea.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/kr.svg"
+  },
+  {
+    "id": "new-zealand",
+    "file": "Flag of New Zealand.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/nz.svg"
+  },
+  {
+    "id": "nigeria",
+    "file": "Flag of Nigeria.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/ng.svg"
+  },
+  {
+    "id": "greece",
+    "file": "Flag of Greece.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/gr.svg"
+  },
+  {
+    "id": "bangladesh",
+    "file": "Flag of Bangladesh.svg",
+    "licence": "Public domain",
+    "author": "Wikimedia Commons / country-flags contributors",
+    "page": "https://github.com/hampusborgos/country-flags/blob/main/svg/bd.svg"
   }
 ]

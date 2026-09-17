@@ -585,6 +585,64 @@ async function live() {
     await ctx.close();
   }
 
+  /* Hidden backs must never reveal pairs. Exercise every level's actual
+     board, so a renderer or item color cannot quietly reintroduce the clue. */
+  {
+    const page = await browser.newPage();
+    await page.goto(base);
+    const ids = await page.evaluate(() => LEVELS.map(lv => lv.id));
+    for (const id of ids) {
+      await page.evaluate(id => openLevel(id), id);
+      const designs = await page.locator('.face-back').evaluateAll(els =>
+        new Set(els.map(el => el.outerHTML)).size);
+      assert(designs === 1, `all hidden card backs are identical — ${id}`);
+    }
+    await page.close();
+  }
+
+  /* Play the added content through all three rounds. The browser clock
+     advances feedback timers while the real buttons and engine do the work. */
+  for (const id of ['flags-world', 'ocean', 'fruit', 'vegetables', 'birds', 'sports']) {
+    const page = await browser.newPage();
+    const errors = [];
+    page.on('pageerror', error => errors.push(String(error)));
+    await page.clock.install();
+    await page.goto(`${base}/#${id}`);
+    await page.locator('#soundBtn').click();
+    await page.addStyleTag({ content: '*, *::before, *::after { animation:none!important; transition:none!important; }' });
+    for (let round = 0; round < 3; round++) {
+      const pairs = await page.locator('.tile').evaluateAll(els =>
+        [...new Set(els.map(el => el.dataset.id))]);
+      const a = page.locator(`.tile[data-id="${pairs[0]}"]`).first();
+      const b = page.locator(`.tile[data-id="${pairs[1]}"]`).first();
+      await a.click();
+      await b.click();
+      await page.clock.runFor(1300);
+      assert(await page.locator('.tile.flipped, .tile.matched').count() === 0,
+        `wrong guesses turn back over — ${id}, round ${round + 1}`);
+      for (const pair of pairs) {
+        const tiles = page.locator(`.tile[data-id="${pair}"]`);
+        await tiles.nth(0).click();
+        await tiles.nth(1).click();
+        await page.clock.runFor(450);
+        assert(await tiles.nth(0).evaluate(el => el.classList.contains('matched')),
+          `pair matches — ${id}/${pair}`);
+        const visibleFact = await page.locator('#fact').evaluate(el => !el.hidden);
+        const imageLoaded = await page.locator('#factPhoto img').evaluate(async img => {
+          try { await img.decode(); return img.naturalWidth > 0; } catch { return false; }
+        });
+        assert(visibleFact && imageLoaded, `matched fact and artwork appear — ${id}/${pair}`);
+      }
+      await page.clock.runFor(1500);
+      assert(await page.locator('#curtain').evaluate(el => !el.hidden),
+        `round completion appears — ${id}, round ${round + 1}`);
+      if (round < 2) await page.locator('#curtainBtn').click();
+    }
+    assert(await page.locator('#trophyEmoji').textContent() === '🏆', `final trophy appears — ${id}`);
+    assert(errors.length === 0, `no page errors — ${id}`, errors.join('; '));
+    await page.close();
+  }
+
   await browser.close();
   server.close();
 }
